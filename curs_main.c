@@ -880,7 +880,8 @@ int mutt_index_menu (void)
       unset_option (OPTREDRAWTREE);
     }
 
-    if (Context) Context->menu = menu;
+    if (Context)
+      Context->menu = menu;
     
     if (Context && !attach_msg)
     {

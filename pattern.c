@@ -361,30 +361,32 @@ static int eat_regexp (pattern_t *pat, BUFFER *s, BUFFER *err)
 
 #define CTX_HUMAN_MSGNO(c) (((c)->hdrs[(c)->v2r[(c)->menu->current]]->msgno)+1)
 
-static char* eat_range_current (pattern_t *pat, BUFFER *s, BUFFER *err)
+static char * eat_range_current (pattern_t *pat, BUFFER *s, BUFFER *err)
 {
   char *tmp;
   int num;
   
   /* Do we actually have a current message? */
-  if (!Context || !Context->menu) {
+  if (!Context || !Context->menu)
+  {
     strfcpy(err->data, _("No current message"), err->dsize);
     return NULL;
   }
 
   num = (int) strtol (s->dptr + 1, &tmp, 0);
-  switch (*s->dptr++) {
-  case '/':
-    pat->min = CTX_HUMAN_MSGNO(Context);
-    pat->max = pat->min + num - 1;
-    break;
-  case ',':
-    pat->max = CTX_HUMAN_MSGNO(Context);
-    if (pat->max >= num)
-      pat->min = pat->max - num + 1;
-    else
-      pat->min = 1;
-    break;
+  switch (*s->dptr++)
+  {
+    case '/':
+      pat->min = CTX_HUMAN_MSGNO(Context);
+      pat->max = pat->min + num - 1;
+      break;
+    case ',':
+      pat->max = CTX_HUMAN_MSGNO(Context);
+      if (pat->max >= num)
+        pat->min = pat->max - num + 1;
+      else
+        pat->min = 1;
+      break;
   }
 
   s->dptr = tmp;
@@ -392,7 +394,7 @@ static char* eat_range_current (pattern_t *pat, BUFFER *s, BUFFER *err)
   
 }
 
-static char* eat_range_nocurrent (pattern_t *pat, BUFFER *s)
+static char * eat_range_nocurrent (pattern_t *pat, BUFFER *s)
 {
   char *tmp;
   int do_exclusive = 0;
@@ -478,14 +480,16 @@ int eat_range (pattern_t *pat, BUFFER *s, BUFFER *err)
   }
 
   /* Classical case: no current message number pattern. */
-  if (*s->dptr != '/' && *s->dptr != ',')
+  if ((*s->dptr != '/') && (*s->dptr != ','))
     tmp = eat_range_nocurrent(pat, s);
-  else {
+  else
+  {
     tmp = eat_range_current(pat, s, err);
-    if (!tmp) return -1;
+    if (!tmp)
+      return -1;
   }
   
-  if (skip_quote && *tmp == '"')
+  if (skip_quote && (*tmp == '"'))
     tmp++;
 
   SKIPWS (tmp);
